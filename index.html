@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>G&D Donuts</title>
+  <style>
+    body { margin: 0; font-family: 'Segoe UI', sans-serif; background-color: #F59C9A; color: #333; }
+    header { text-align: center; padding: 20px; background-color: #fff; }
+    header img { max-width: 150px; }
+    h1 { font-family: 'cursive'; color: #d6336c; margin-top: 10px; }
+    .tabs { display: flex; justify-content: center; gap: 20px; background: #fff; padding: 10px 0; }
+    .tab { cursor: pointer; padding: 10px 20px; border-radius: 8px; background: #d6336c; color: #fff; }
+    .tab.active { background: #fff; color: #d6336c; border: 2px solid #d6336c; }
+    .content { display: none; padding: 20px; background: #fff; margin: 10px; border-radius: 8px; }
+    .content.active { display: block; }
+    label, select, input[type=checkbox], input[type=text] { display: block; margin-top: 10px; width: 100%; }
+    button { margin-top: 20px; padding: 10px 20px; background: #d6336c; color: #fff; border: none; border-radius: 8px; cursor: pointer; width: 100%; }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="logo.png" alt="G&D Donuts Logo">
+    <h1>G&D Donuts</h1>
+  </header>
+  <div class="tabs">
+    <div class="tab active" onclick="showTab('glaseadas')">Donas Glaseadas</div>
+    <div class="tab" onclick="showTab('nobanhadas')">Donas No Bañadas</div>
+  </div>
+  <div id="glaseadas" class="content active">
+    <h2>Donas Glaseadas</h2>
+    <label>Baño:
+      <select id="bañoGlaseadas">
+        <option value="Chocolate Blanco">Chocolate Blanco</option>
+        <option value="Chocolate Negro">Chocolate Negro</option>
+      </select>
+    </label>
+    <label><input type="checkbox" value="M&M"> M&M</label>
+    <label><input type="checkbox" value="Jumbo blanco"> Jumbo blanco</label>
+    <label><input type="checkbox" value="Galleta Oreo"> Galleta Oreo</label>
+    <label><input type="checkbox" value="Masmelo"> Masmelo</label>
+    <label><input type="checkbox" value="Piazza"> Piazza</label>
+    <label><input type="checkbox" value="Chocolate Gol"> Chocolate Gol</label>
+    <label><input type="checkbox" value="Chocorramo"> Chocorramo</label>
+    <label><input type="checkbox" value="Cocosette"> Cocosette</label>
+    <label><input type="checkbox" value="Maní"> Maní</label>
+  </div>
+  <div id="nobanhadas" class="content">
+    <h2>Donas No Bañadas</h2>
+    <label>Salsa:
+      <select id="salsaNobanhadas">
+        <option value="Arequipe">Arequipe</option>
+        <option value="Chocolate blanco">Chocolate blanco</option>
+        <option value="Chocolate negro">Chocolate negro</option>
+        <option value="Crema chantilly">Crema chantilly</option>
+        <option value="Leche condensada">Leche condensada</option>
+      </select>
+    </label>
+    <label><input type="checkbox" value="Fresas"> Fresas</label>
+    <label><input type="checkbox" value="Oreo"> Oreo</label>
+    <label><input type="checkbox" value="Chispitas de chocolates"> Chispitas de chocolates</label>
+  </div>
+  <div class="content active">
+    <label>Nombre del cliente:
+      <input type="text" id="nombreCliente" placeholder="Escribe tu nombre">
+    </label>
+  </div>
+  <button onclick="enviarPedido()">Enviar Pedido por WhatsApp</button>
+  <script>
+    function showTab(tab) {
+      document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.content').forEach(el => el.classList.remove('active'));
+      document.getElementById(tab).classList.add('active');
+      document.querySelector(`.tab[onclick="showTab('${tab}')"]`).classList.add('active');
+    }
+    function enviarPedido() {
+      const nombre = document.getElementById("nombreCliente").value.trim();
+      const baño = document.getElementById("bañoGlaseadas").value;
+      const salsa = document.getElementById("salsaNobanhadas").value;
+      const glaseToppings = Array.from(document.querySelectorAll("#glaseadas input:checked")).map(e => e.value);
+      const noGlaseToppings = Array.from(document.querySelectorAll("#nobanhadas input:checked")).map(e => e.value);
+      let mensaje = nombre ? `Hola, soy ${nombre}, me gustaría pedir:` : "Hola, me gustaría pedir:";
+      if (glaseToppings.length) mensaje += `\n🍩 Donas Glaseadas (Baño ${baño})\nToppings: ${glaseToppings.join(", ")}`;
+      if (noGlaseToppings.length) mensaje += `\n🍩 Donas No Bañadas (Salsa ${salsa})\nToppings: ${noGlaseToppings.join(", ")}`;
+      window.open(`https://wa.me/573183910014?text=${encodeURIComponent(mensaje)}`);
+    }
+  </script>
+</body>
+</html>
